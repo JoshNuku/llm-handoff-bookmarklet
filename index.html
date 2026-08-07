@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Context Handoff — Bookmarklet</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --btn-bg: #2563eb;
+      --btn-hover: #1d4ed8;
+      --code-bg: #090d16;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 680px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    }
+
+    .header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+    }
+
+    .bookmarklet-zone {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 2px dashed var(--card-border);
+      border-radius: 12px;
+      margin: 1.5rem 0 2.5rem 0;
+    }
+
+    .bookmarklet-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: var(--btn-bg);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      cursor: grab;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .bookmarklet-btn:hover {
+      background: var(--btn-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    }
+
+    .bookmarklet-btn:active {
+      cursor: grabbing;
+      transform: translateY(0);
+    }
+
+    .instruction-note {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-content {
+      font-size: 0.95rem;
+      color: #e2e8f0;
+    }
+
+    .step-content strong {
+      color: #ffffff;
+    }
+
+    .platforms {
+      display: flex;
+      gap: 10px;
+      margin-top: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .platform-tag {
+      padding: 4px 10px;
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <span class="badge">Zero-Install Developer Tool</span>
+      <h1>LLM Context Handoff</h1>
+      <p class="subtitle">Extract code state & active focus from web LLMs into clipboard Markdown in one click.</p>
+    </div>
+
+    <div class="bookmarklet-zone">
+      <!-- The Drag-and-Drop Bookmarklet Link -->
+      <a class="bookmarklet-btn" href="javascript:(function(){const code=Array.from(document.querySelectorAll('pre code')).map((b,i)=>`### Code Snippet ${i+1}\n\`\`\`\n${b.innerText.trim()}\n\`\`\``).join('\n\n');const sel=window.getSelection().toString().trim();let out=\`# LLM HANDOFF SNAPSHOT\n*Extracted: ${new Date().toLocaleString()}*\n\n\`;if(sel)out+=\`## Focus / Highlighted Text\n${sel}\n\n\`;if(code)out+=\`## Extracted Code Blocks\n${code}\n\n\`;out+=\`## Next Step\n> [Insert what the next LLM should execute here]\`;const el=document.createElement('textarea');el.value=out;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);alert('✅ LLM Context copied to clipboard!');})();">
+        📋 Extract LLM Context
+      </a>
+      <p class="instruction-note"> Drag the button above to your browser's Bookmarks Bar.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <strong>Drag to Bookmarks Bar:</strong> Drag the button above directly into your browser bookmarks bar (press <code>Ctrl+Shift+B</code> or <code>Cmd+Shift+B</code> if your bar is hidden).
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <strong>Click on Limit / Timeout:</strong> When your web LLM session runs out or hits a rate limit, click <strong>📋 Extract LLM Context</strong> in your bookmarks bar.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <strong>Paste & Continue:</strong> Open ChatGPT, Claude, Gemini, or DeepSeek in a new tab, press <code>Cmd+V</code> / <code>Ctrl+V</code>, append your next instruction, and run.
+        </div>
+      </div>
+    </div>
+
+    <div class="platforms">
+      <span class="platform-tag">ChatGPT</span>
+      <span class="platform-tag">Claude.ai</span>
+      <span class="platform-tag">Gemini</span>
+      <span class="platform-tag">DeepSeek</span>
+    </div>
+
+    <footer>
+      Works in Chrome, Firefox, Edge, and Safari.
+    </footer>
+  </div>
+
+</body>
+</html>
