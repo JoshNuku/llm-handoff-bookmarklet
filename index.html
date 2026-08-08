@@ -12,10 +12,8 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --accent: #38bdf8;
-      --accent-hover: #0284c7;
       --btn-bg: #2563eb;
       --btn-hover: #1d4ed8;
-      --code-bg: #090d16;
     }
 
     * {
@@ -195,18 +193,18 @@
     </div>
 
     <div class="bookmarklet-zone">
-      <!-- The Drag-and-Drop Bookmarklet Link -->
-      <a class="bookmarklet-btn" href="javascript:(function(){const code=Array.from(document.querySelectorAll('pre code')).map((b,i)=>`### Code Snippet ${i+1}\n\`\`\`\n${b.innerText.trim()}\n\`\`\``).join('\n\n');const sel=window.getSelection().toString().trim();let out=`# LLM HANDOFF SNAPSHOT\n*Extracted: ${new Date().toLocaleString()}*\n\n`;if(sel)out+=`## Focus / Highlighted Text\n${sel}\n\n`;if(code)out+=`## Extracted Code Blocks\n${code}\n\n`;out+=`## Next Step\n> [Insert what the next LLM should execute here]`;function fallbackModal(text){const overlay=document.createElement('div');overlay.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:999999;display:flex;align-items:center;justify-content:center;';const box=document.createElement('div');box.style.cssText='background:#1e293b;padding:20px;border-radius:12px;width:90%;max-width:600px;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-family:sans-serif;color:#fff;';box.innerHTML='<h3 style="margin-top:0;margin-bottom:10px;">Copy LLM Context</h3><p style="font-size:12px;color:#94a3b8;margin-bottom:10px;">Press <b>Cmd+C</b> or <b>Ctrl+C</b> to copy, then close this box.</p>';const area=document.createElement('textarea');area.value=text;area.style.cssText='width:100%;height:200px;background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:8px;padding:10px;font-family:monospace;font-size:12px;box-sizing:border-box;';const closeBtn=document.createElement('button');closeBtn.innerText='Close';closeBtn.style.cssText='margin-top:10px;padding:8px 16px;background:#2563eb;color:#fff;border:none;border-radius:6px;cursor:pointer;float:right;';closeBtn.onclick=()=>document.body.removeChild(overlay);box.appendChild(area);box.appendChild(closeBtn);overlay.appendChild(box);document.body.appendChild(overlay);area.focus();area.select();}if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(out).then(()=>alert('✅ LLM Context copied to clipboard!')).catch(()=>fallbackModal(out));}else{fallbackModal(out);}})();">
+      <!-- Updated Bookmarklet Link with Robust Fallback Modal -->
+      <a class="bookmarklet-btn" href="javascript:(function(){const code=Array.from(document.querySelectorAll('pre code')).map((b,i)=>`### Code Snippet ${i+1}\n\`\`\`\n${b.innerText.trim()}\n\`\`\``).join('\n\n');const sel=window.getSelection().toString().trim();let out=\`# LLM HANDOFF SNAPSHOT\n*Extracted: ${new Date().toLocaleString()}*\n\n\`;if(sel)out+=\`## Focus / Highlighted Text\n${sel}\n\n\`;if(code)out+=\`## Extracted Code Blocks\n${code}\n\n\`;out+=\`## Next Step\n> [Insert what the next LLM should execute here]\`;function fallbackModal(text){const overlay=document.createElement('div');overlay.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:999999;display:flex;align-items:center;justify-content:center;';const box=document.createElement('div');box.style.cssText='background:#1e293b;padding:20px;border-radius:12px;width:90%;max-width:600px;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-family:sans-serif;color:#fff;';box.innerHTML='<h3 style="margin-top:0;margin-bottom:10px;">Copy LLM Context</h3><p style="font-size:12px;color:#94a3b8;margin-bottom:10px;">Press <b>Cmd+C</b> or <b>Ctrl+C</b> to copy, then close this box.</p>';const area=document.createElement('textarea');area.value=text;area.style.cssText='width:100%;height:200px;background:#0f172a;color:#f8fafc;border:1px solid #334155;border-radius:8px;padding:10px;font-family:monospace;font-size:12px;box-sizing:border-box;';const closeBtn=document.createElement('button');closeBtn.innerText='Close';closeBtn.style.cssText='margin-top:10px;padding:8px 16px;background:#2563eb;color:#fff;border:none;border-radius:6px;cursor:pointer;float:right;';closeBtn.onclick=()=>document.body.removeChild(overlay);box.appendChild(area);box.appendChild(closeBtn);overlay.appendChild(box);document.body.appendChild(overlay);area.focus();area.select();}if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(out).then(()=>alert('✅ LLM Context copied to clipboard!')).catch(()=>fallbackModal(out));}else{fallbackModal(out);}})();">
         📋 Extract LLM Context
       </a>
-      <p class="instruction-note"> Drag the button above to your browser's Bookmarks Bar.</p>
+      <p class="instruction-note">Drag the button above to your browser's Bookmarks Bar.</p>
     </div>
 
     <div class="steps">
       <div class="step-item">
         <div class="step-number">1</div>
         <div class="step-content">
-          <strong>Drag to Bookmarks Bar:</strong> Drag the button above directly into your browser bookmarks bar (press <code>Ctrl+Shift+B</code> or <code>Cmd+Shift+B</code> if your bar is hidden).
+          <strong>Drag to Bookmarks Bar:</strong> Drag the button above directly into your browser bookmarks bar (press <code>Ctrl+Shift+B</code> or <code>Cmd+Shift+B</code> if hidden).
         </div>
       </div>
       <div class="step-item">
@@ -218,7 +216,7 @@
       <div class="step-item">
         <div class="step-number">3</div>
         <div class="step-content">
-          <strong>Paste & Continue:</strong> Open ChatGPT, Claude, Gemini, or DeepSeek in a new tab, press <code>Cmd+V</code> / <code>Ctrl+V</code>, append your next instruction, and run.
+          <strong>Paste & Continue:</strong> Open ChatGPT, Claude, Gemini, or DeepSeek in a new tab, press <code>Cmd+V</code> / <code>Ctrl+V</code> (or copy from the popup), append your next instruction, and run.
         </div>
       </div>
     </div>
